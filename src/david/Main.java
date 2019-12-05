@@ -95,17 +95,17 @@ public class Main {
         // 1. scan_char aufrufen
 
         // 2. Wert überpfüfen, muss zwischen 0-9 liegen
-        int get_zahl;
+        char input;
         do {
-            get_zahl = scan_int();
-            println("Deine Eingabe ist " + get_zahl + ". Liegt die Zahl außerhalb des Geltungsbereich, erscheint erneut die Eingabeaufforderung");
+            input = scan_char();
+            println("Deine Eingabe ist " + input + ". Liegt die Zahl außerhalb des Geltungsbereich, erscheint erneut die Eingabeaufforderung");
         }
-        while (get_zahl >= -1 && get_zahl >= 10);
+        while (input >= -1 && input >= 10);
 
         //      Bei Fehler, Fehlerausgabe machen, so das der Spieler neu eingeben muss ( also zurück zu 1.)
         // 3. char in int umwandeln ( also '0' -> 0 und nicht ascii 65 oder was auch immer) (kann auch vor 2.)
         // 4. Ergebnis zurückgeben (return)
-        return get_zahl;
+        return input;
     }
 
 
