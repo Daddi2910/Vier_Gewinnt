@@ -62,51 +62,80 @@ public class Main {
     }
 
 
-    public static void main(String[] args) {
-
-        char[][] playground = new char[ROWS][COLS];
-        for(int y=0; y<ROWS; y++) {
-            for(int x=0; x<COLS; x++) {
-                int tmp = x + y;             //Beispieldaten werdden erzeugt
-                if(tmp%3==0) {
-                    playground[y][x] = ' ';
-                } else if(tmp%3==1) {
-                    playground[y][x] = 'X';
-                } else {
-                    playground[y][x] = 'O';
-                }
-            }
-        }
-
-        printPlayGround(playground);
-        println("Wählen Sie eine Feldnummer (0-9):");
-        int column = get_valid_num();
-
-        //erste Eingabe speichern
-        playground [0][column] = 'E';
-        printPlayGround(playground);
-    }
-
-    // Methoden
-
-
 
     static int get_valid_num() {
         // 1. scan_char aufrufen
 
         // 2. Wert überpfüfen, muss zwischen 0-9 liegen
-        char input;
+        int num;
         do {
-            input = scan_char();
+            char input = scan_char();
             println("Deine Eingabe ist " + input + ". Liegt die Zahl außerhalb des Geltungsbereich, erscheint erneut die Eingabeaufforderung");
+            num = input - '0'; // oder -48 aus ascii ziffer ne echte machen ('0'==48)
         }
-        while (input >= -1 && input >= 10);
+        while (num <0 || num >= 10);
 
         //      Bei Fehler, Fehlerausgabe machen, so das der Spieler neu eingeben muss ( also zurück zu 1.)
         // 3. char in int umwandeln ( also '0' -> 0 und nicht ascii 65 oder was auch immer) (kann auch vor 2.)
         // 4. Ergebnis zurückgeben (return)
-        return input;
+        return num;
     }
+
+    /**
+     * Returns the row index of the first empty row at column col.
+     * If no row is valid, -1 is returned.
+     */
+    static int get_first_valid_row(char[][] playground, int col) {
+        for (int y=ROWS-1; y>=0;y--) {
+         //   if (playground [y] [col] != ' ');
+           // continue;
+            if (playground [y] [col] == ' ');
+            return y;
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {
+
+        char[][] playground = new char[ROWS][COLS];
+        for(int y=0; y<ROWS; y++) {
+            for(int x=0; x<COLS; x++) {
+                playground[y][x] = ' ';
+            }
+        }
+
+        /////////// Beispieldaten erzeugen:
+        for(int y=0; y<ROWS; y++) {
+            if(y%2==0)
+                playground[y][3] = 'X';
+            else
+                playground[y][3] = 'O';
+        }
+        playground[ROWS-1][5] = 'O';
+        playground[ROWS-1][6] = 'O';
+        playground[ROWS-2][6] = 'O';
+        //////////////////////
+
+        printPlayGround(playground);
+
+        // erste Eingabe speichern
+        println("Wählen Sie eine Feldnummer (0-9):");
+        int column = get_valid_num();
+
+        // passende Zeile finden
+        int row = get_first_valid_row(playground, column);
+        // testen ob eine Zeile existiert (Spalte voll)
+
+        // feld setzen
+        playground [0][column] = 'E';
+        printPlayGround(playground);
+
+        // neues Spielfeld testen:
+        // -> Komplett voll: Ende, Unentschieden
+        // -> Gewinner?: Ende, Gewonnen
+        // -> sonst gehts weiter mit dem nächstem Spieler
+    }
+
 
 
 
