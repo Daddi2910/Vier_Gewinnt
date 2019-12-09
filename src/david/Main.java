@@ -86,13 +86,15 @@ public class Main {
      * If no row is valid, -1 is returned.
      */
     static int get_first_valid_row(char[][] playground, int col) {
-        for (int y=ROWS-1; y>=0;y--) {
-         //   if (playground [y] [col] != ' ');
-           // continue;
-            if (playground [y] [col] == ' ');
+        for (int y = ROWS - 1; y <= 0; y--) {
+            //   if (playground [y] [col] != ' ');
+            // continue;
+            if (playground[y][col] == ' ')
             return y;
         }
+
         return -1;
+
     }
 
     public static void main(String[] args) {
@@ -126,8 +128,9 @@ public class Main {
         int row = get_first_valid_row(playground, column);
         // testen ob eine Zeile existiert (Spalte voll)
 
-        // feld setzen
-        playground [0][column] = 'E';
+        // feld setzen, für "0" den zurückgegebebn Wert aus get_first_valid_row nehmen!
+        playground[0][column] = 'E';
+
         printPlayGround(playground);
 
         // neues Spielfeld testen:
