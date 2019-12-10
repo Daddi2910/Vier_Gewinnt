@@ -6,22 +6,26 @@ public class Main {
     static void print(String text) {
         System.out.print(text);
     }
+
     static void println(String text) {
         System.out.println(text);
     }
+
     static char scan_char() {
         Scanner in = new Scanner(System.in);
         String s = in.nextLine();
-        if(s.length() == 0)
+        if (s.length() == 0)
             return '\n';
         char res = s.charAt(0);
         return res;
     }
+
     static int scan_int() {
         Scanner in = new Scanner(System.in);
         int s = in.nextInt();
         return s;
     }
+
     static final int ROWS = 8;
     static final int COLS = 10;
 
@@ -46,21 +50,20 @@ public class Main {
 
         // nach allem
 
-        int unten =0;
-        while (unten <= COLS){
+        int unten = 0;
+        while (unten <= COLS) {
             print("___");
             unten++;
         }
         print("\n ");   // Absatz + Leerzeichen
-        for(int zahl=0; zahl <COLS; zahl++){
-            print("  "+zahl);
+        for (int zahl = 0; zahl < COLS; zahl++) {
+            print("  " + zahl);
         }
 //        for(int unten =0; unten<=COLS; unten++) {
 ////            print("____");
 ////        }
         println("");    // Absatz am Ende
     }
-
 
 
     static int get_valid_num() {
@@ -73,7 +76,7 @@ public class Main {
             println("Deine Eingabe ist " + input + ". Liegt die Zahl außerhalb des Geltungsbereich, erscheint erneut die Eingabeaufforderung");
             num = input - '0'; // oder -48 aus ascii ziffer ne echte machen ('0'==48)
         }
-        while (num <0 || num >= 10);
+        while (num < 0 || num >= 10);
 
         //      Bei Fehler, Fehlerausgabe machen, so das der Spieler neu eingeben muss ( also zurück zu 1.)
         // 3. char in int umwandeln ( also '0' -> 0 und nicht ascii 65 oder was auch immer) (kann auch vor 2.)
@@ -86,13 +89,12 @@ public class Main {
      * If no row is valid, -1 is returned.
      */
     static int get_first_valid_row(char[][] playground, int col) {
-        for (int y = ROWS - 1; y <= 0; y--) {
+        for (int y = ROWS - 1; y >= 0; y--) {
             //   if (playground [y] [col] != ' ');
             // continue;
             if (playground[y][col] == ' ')
-            return y;
+                return y;
         }
-
         return -1;
 
     }
@@ -100,36 +102,45 @@ public class Main {
     public static void main(String[] args) {
 
         char[][] playground = new char[ROWS][COLS];
-        for(int y=0; y<ROWS; y++) {
-            for(int x=0; x<COLS; x++) {
+        for (int y = 0; y < ROWS; y++) {
+            for (int x = 0; x < COLS; x++) {
                 playground[y][x] = ' ';
             }
         }
 
         /////////// Beispieldaten erzeugen:
-        for(int y=0; y<ROWS; y++) {
-            if(y%2==0)
+        for (int y = 0; y < ROWS; y++) {
+            if (y % 2 == 0)
                 playground[y][3] = 'X';
             else
                 playground[y][3] = 'O';
         }
-        playground[ROWS-1][5] = 'O';
-        playground[ROWS-1][6] = 'O';
-        playground[ROWS-2][6] = 'O';
+        playground[ROWS - 1][5] = 'O';
+        playground[ROWS - 1][6] = 'O';
+        playground[ROWS - 2][6] = 'O';
         //////////////////////
 
         printPlayGround(playground);
 
         // erste Eingabe speichern
         println("Wählen Sie eine Feldnummer (0-9):");
-        int column = get_valid_num();
+        int row = -1;
+        int column = 0;
+        while (row == -1) {
+            column = get_valid_num();
 
-        // passende Zeile finden
-        int row = get_first_valid_row(playground, column);
-        // testen ob eine Zeile existiert (Spalte voll)
+            // passende Zeile finden
+            row = get_first_valid_row(playground, column);
+            // testen ob eine Zeile existiert (Spalte voll)
+            if (row == -1) {
+                println("Die Spalte ist schon voll, bitte eine andere wählen!");
+            }
+        }
+
 
         // feld setzen, für "0" den zurückgegebebn Wert aus get_first_valid_row nehmen!
-        playground[0][column] = 'E';
+        playground[row][column] = 'E';
+
 
         printPlayGround(playground);
 
@@ -140,21 +151,18 @@ public class Main {
     }
 
 
-
-
-
     static void beispiele() {
 
         // write your code here
 
         //int[][] matrix = {{1, 2, 3}, {4, 5, 6}};
         char[][] playground = new char[COLS][ROWS]; //Erstellung der Matrix -->Koordinatensystem ist obenlinks!!!
-        for(int y=0; y<playground.length; y++) {  //Anzahl der "Schranksysteme"
-            for(int x=0; x<playground[y].length; x++) { //Anzahl der Fächer des Schrankelements an der Stelle y
+        for (int y = 0; y < playground.length; y++) {  //Anzahl der "Schranksysteme"
+            for (int x = 0; x < playground[y].length; x++) { //Anzahl der Fächer des Schrankelements an der Stelle y
                 int tmp = x + y;             //Beispieldaten werdden erzeugt
-                if(tmp%3==0) {
+                if (tmp % 3 == 0) {
                     playground[y][x] = '+';
-                } else if(tmp%3==1) {
+                } else if (tmp % 3 == 1) {
                     playground[y][x] = 'X';
                 } else {
                     playground[y][x] = 'O';
@@ -167,12 +175,12 @@ public class Main {
 
         println("   :" + playground[2][9]);  //Ausgeben des Wertes aus Zeile 3 Spalte 9
 
-        for(int y=0; y<playground.length; y++) {  //jede Zeile wird durchgelaufen
+        for (int y = 0; y < playground.length; y++) {  //jede Zeile wird durchgelaufen
 
             char[] zeile = playground[y];  // Schrank Y wird "Zeile" zugewiessen (Wichtig, nicht die Schublade und keine Kopie!!!)
 
-            for(int x=0; x<zeile.length; x++) { //Es wird jede Schublade x des Schrankes y durchlaufen
-                print(""+zeile[x]+ "  ");  //Ausgabe Inhald der Schublade x
+            for (int x = 0; x < zeile.length; x++) { //Es wird jede Schublade x des Schrankes y durchlaufen
+                print("" + zeile[x] + "  ");  //Ausgabe Inhald der Schublade x
             }
             println("");
         }
