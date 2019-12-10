@@ -141,8 +141,6 @@ public class Main {
                         println("Die Spalte ist schon voll, bitte eine andere wählen!");
                     }
                 }
-
-
                 // feld setzen, für "0" den zurückgegebebn Wert aus get_first_valid_row nehmen!
                 if (spieler == 1)
                 {
@@ -156,6 +154,7 @@ public class Main {
                 printPlayGround(playground);
 
                 // neues Spielfeld testen:
+
                 // -> Komplett voll: Ende, Unentschieden
                 // -> Gewinner?: Ende, Gewonnen
                 // -> sonst gehts weiter mit dem nächstem Spiele
