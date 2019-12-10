@@ -128,7 +128,7 @@ public class Main {
         while (winner == false || full == false ) {
             for (spieler = 1; spieler <= 3; spieler++) {
                 // erste Eingabe speichern
-                println("Spieler " + spieler + " ,wählen Sie eine Feldnummer (0-9):");
+                println("Spieler " + spieler + ", wählen Sie eine Feldnummer (0-9):");
                 int row = -1;
                 int column = 0;
                 while (row == -1) {
