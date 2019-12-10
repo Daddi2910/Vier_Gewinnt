@@ -101,6 +101,7 @@ public class Main {
 
     public static void main(String[] args) {
 
+
         char[][] playground = new char[ROWS][COLS];
         for (int y = 0; y < ROWS; y++) {
             for (int x = 0; x < COLS; x++) {
@@ -121,33 +122,45 @@ public class Main {
         //////////////////////
 
         printPlayGround(playground);
+        boolean winner = false;
+        boolean full = false;
+        int spieler = 1;
+        while (winner == false || full == false ) {
+            for (spieler = 1; spieler <= 3; spieler++) {
+                // erste Eingabe speichern
+                println("Spieler " + spieler + " ,wählen Sie eine Feldnummer (0-9):");
+                int row = -1;
+                int column = 0;
+                while (row == -1) {
+                    column = get_valid_num();
 
-        // erste Eingabe speichern
-        println("Wählen Sie eine Feldnummer (0-9):");
-        int row = -1;
-        int column = 0;
-        while (row == -1) {
-            column = get_valid_num();
+                    // passende Zeile finden
+                    row = get_first_valid_row(playground, column);
+                    // testen ob eine Zeile existiert (Spalte voll)
+                    if (row == -1) {
+                        println("Die Spalte ist schon voll, bitte eine andere wählen!");
+                    }
+                }
 
-            // passende Zeile finden
-            row = get_first_valid_row(playground, column);
-            // testen ob eine Zeile existiert (Spalte voll)
-            if (row == -1) {
-                println("Die Spalte ist schon voll, bitte eine andere wählen!");
+
+                // feld setzen, für "0" den zurückgegebebn Wert aus get_first_valid_row nehmen!
+                if (spieler == 1)
+                {
+                    playground[row][column] = 'E';
+                }
+                else
+                    playground[row][column] = 'Z';
+                if (spieler == 2)
+                    spieler = 0;
+
+                printPlayGround(playground);
+
+                // neues Spielfeld testen:
+                // -> Komplett voll: Ende, Unentschieden
+                // -> Gewinner?: Ende, Gewonnen
+                // -> sonst gehts weiter mit dem nächstem Spiele
             }
         }
-
-
-        // feld setzen, für "0" den zurückgegebebn Wert aus get_first_valid_row nehmen!
-        playground[row][column] = 'E';
-
-
-        printPlayGround(playground);
-
-        // neues Spielfeld testen:
-        // -> Komplett voll: Ende, Unentschieden
-        // -> Gewinner?: Ende, Gewonnen
-        // -> sonst gehts weiter mit dem nächstem Spieler
     }
 
 
