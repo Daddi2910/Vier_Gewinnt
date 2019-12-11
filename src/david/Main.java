@@ -84,6 +84,15 @@ public class Main {
         return num;
     }
 
+    static boolean test_game_draw(char[][] playground) {
+        for (int x = 0; x < COLS; x++) {
+            if (playground[0][x] == ' ')
+                return false;
+        }
+        return true;
+
+    }
+
     /**
      * Returns the row index of the first empty row at column col.
      * If no row is valid, -1 is returned.
@@ -111,55 +120,62 @@ public class Main {
 
         /////////// Beispieldaten erzeugen:
         for (int y = 0; y < ROWS; y++) {
-            if (y % 2 == 0)
-                playground[y][3] = 'X';
-            else
-                playground[y][3] = 'O';
+            for (int x = 0; x < COLS - 1; x++)
+
+                playground[y][x] = 'O';
         }
-        playground[ROWS - 1][5] = 'O';
-        playground[ROWS - 1][6] = 'O';
-        playground[ROWS - 2][6] = 'O';
+        //    playground[ROWS - 1][5] = 'O';
+        //  playground[ROWS - 1][6] = 'O';
+        //playground[ROWS - 2][6] = 'O';
         //////////////////////
 
         printPlayGround(playground);
-        boolean winner = false;
-        boolean full = false;
         int spieler = 1;
-        while (winner == false || full == false ) {
-            for (spieler = 1; spieler <= 3; spieler++) {
-                // erste Eingabe speichern
-                println("Spieler " + spieler + ", wählen Sie eine Feldnummer (0-9):");
-                int row = -1;
-                int column = 0;
-                while (row == -1) {
-                    column = get_valid_num();
+        while (true) {
+        // for(;;)
 
-                    // passende Zeile finden
-                    row = get_first_valid_row(playground, column);
-                    // testen ob eine Zeile existiert (Spalte voll)
-                    if (row == -1) {
-                        println("Die Spalte ist schon voll, bitte eine andere wählen!");
-                    }
+            //Eingabe speichern
+            println("Spieler " + spieler + ", wählen Sie eine Feldnummer (0-9):");
+            int row = -1;
+            int column = 0;
+            while (row == -1) {
+                column = get_valid_num();
+
+                // passende Zeile finden
+                row = get_first_valid_row(playground, column);
+                // testen ob eine Zeile existiert (Spalte voll)
+                if (row == -1) {
+                    println("Die Spalte ist schon voll, bitte eine andere wählen!");
                 }
-                // feld setzen, für "0" den zurückgegebebn Wert aus get_first_valid_row nehmen!
-                if (spieler == 1)
-                {
-                    playground[row][column] = 'E';
-                }
-                else
-                    playground[row][column] = 'Z';
-                if (spieler == 2)
-                    spieler = 0;
+            }
+            // feld setzen, für "0" den zurückgegebebn Wert aus get_first_valid_row nehmen!
+            if (spieler == 1) {
+                playground[row][column] = 'E';
+                spieler = 2;
+            } else {
+                playground[row][column] = 'Z';
+                spieler = 1;
+            }
 
-                printPlayGround(playground);
+            printPlayGround(playground);
 
-                // neues Spielfeld testen:
+            // neues Spielfeld testen:
 
-                // -> Komplett voll: Ende, Unentschieden
-                // -> Gewinner?: Ende, Gewonnen
-                // -> sonst gehts weiter mit dem nächstem Spiele
+            // -> Komplett voll: Ende, Unentschieden
+            // -> Gewinner?: Ende, Gewonnen
+            // -> sonst gehts weiter mit dem nächstem Spiele
+
+
+            //Testen, ob Spielfeld voll ist
+            boolean is_draw = test_game_draw(playground);
+            if (is_draw) {
+                println("Unentschieden");
+                break;  // Aus der while(true) raus
             }
         }
+
+        println("Ende?");
+
     }
 
 
