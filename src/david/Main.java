@@ -84,14 +84,102 @@ public class Main {
         return num;
     }
 
-    static boolean test_game_draw(char[][] playground) {
-        for (int x = 0; x < COLS; x++) {
+    static boolean test_game_draw(char[][] playground)
+    {
+        for (int x = 0; x < COLS; x++)
+        {
             if (playground[0][x] == ' ')
                 return false;
         }
         return true;
 
     }
+    static boolean test_game_winner(char[][] playground)
+    {
+
+        //Zeile konstant, gucken ob 4 aufeinanderfolgende Spalten mit gleichem Inhalt vorhanden sind
+        for (int y=0; y < ROWS; y++)
+        {
+            int zahl1 =0;
+            int zahl2 =1;
+            int zahl3 =2;
+            int zahl4 =3;
+
+            for (int a =0; a<= COLS-4; a++)
+            {
+                if (playground[y][zahl1] == 'Z' && playground[y][zahl2] == 'Z' && playground[y][zahl3] == 'Z' && playground[y][zahl4] == 'Z' || playground[y][zahl1] == 'E' && playground[y][zahl2] == 'E' && playground[y][zahl3] == 'E' && playground[y][zahl4] == 'E')
+                {
+                    return true;
+                }
+                zahl1++;
+                zahl2++;
+                zahl3++;
+                zahl4++;
+            }
+        }
+        //Spalte konstant, gucken ob 4 aufeinanderfolgende Zeilen mit gleichem Inhalt vorhanden sind
+        for (int x=0; x < COLS; x++)
+        {
+            int zahl1 =0;
+            int zahl2 =1;
+            int zahl3 =2;
+            int zahl4 =3;
+
+            for (int a =0; a<= ROWS-4; a++)
+            {
+                if (playground[zahl1][x] == 'Z' && playground[zahl2][x] == 'Z' && playground[zahl3][x] == 'Z' && playground[zahl4][x] == 'Z' || playground[zahl1][x] == 'E' && playground[zahl2][x] == 'E' && playground[zahl3][x] == 'E' && playground[zahl4][x] == 'E')
+                {
+                    return true;
+                }
+                zahl1++;
+                zahl2++;
+                zahl3++;
+                zahl4++;
+            }
+        }
+        //Die Diagonale nach rechts absteigend
+            for (int y=0; y < ROWS; y++) {
+                int zahl1 = 0;
+                int zahl2 = 1;
+                int zahl3 = 2;
+                int zahl4 = 3;
+
+                for (int a = 0; a <= COLS - 4; a++) {
+                    if (playground[y][zahl1] == 'Z' && playground[y + 1][zahl2] == 'Z' && playground[y + 2][zahl3] == 'Z' && playground[y + 3][zahl4] == 'Z' || playground[y][zahl1] == 'E' && playground[y + 1][zahl2] == 'E' && playground[y + 2][zahl3] == 'E' && playground[y + 3][zahl4] == 'E') {
+                        return true;
+                    }
+                    zahl1++;
+                    zahl2++;
+                    zahl3++;
+                    zahl4++;
+                }
+            }
+
+            //Diagonale nach links absteigend
+         for (int x=0; x < COLS; x++)
+            {
+                int zahl1 =0;
+                int zahl2 =1;
+                int zahl3 =2;
+                int zahl4 =3;
+
+                for (int a =0; a<= ROWS-4; a++)
+                {
+                    if (playground[zahl1][x] == 'Z' && playground[zahl2][x] == 'Z' && playground[zahl3][x] == 'Z' && playground[zahl4][x] == 'Z' || playground[zahl1][x] == 'E' && playground[zahl2][x] == 'E' && playground[zahl3][x] == 'E' && playground[zahl4][x] == 'E')
+                    {
+                        return true;
+                    }
+                    zahl1++;
+                    zahl2++;
+                    zahl3++;
+                    zahl4++;
+                }
+
+            }
+
+        return false;
+    }
+
 
     /**
      * Returns the row index of the first empty row at column col.
@@ -119,11 +207,11 @@ public class Main {
         }
 
         /////////// Beispieldaten erzeugen:
-        for (int y = 0; y < ROWS; y++) {
-            for (int x = 0; x < COLS - 1; x++)
+       // for (int y = 0; y < ROWS; y++) {
+         //   for (int x = 0; x < COLS - 1; x++)
 
-                playground[y][x] = 'O';
-        }
+           //     playground[y][x] = 'O';
+
         //    playground[ROWS - 1][5] = 'O';
         //  playground[ROWS - 1][6] = 'O';
         //playground[ROWS - 2][6] = 'O';
@@ -132,7 +220,7 @@ public class Main {
         printPlayGround(playground);
         int spieler = 1;
         while (true) {
-        // for(;;)
+            // for(;;)
 
             //Eingabe speichern
             println("Spieler " + spieler + ", wählen Sie eine Feldnummer (0-9):");
@@ -151,10 +239,8 @@ public class Main {
             // feld setzen, für "0" den zurückgegebebn Wert aus get_first_valid_row nehmen!
             if (spieler == 1) {
                 playground[row][column] = 'E';
-                spieler = 2;
             } else {
                 playground[row][column] = 'Z';
-                spieler = 1;
             }
 
             printPlayGround(playground);
@@ -163,15 +249,28 @@ public class Main {
 
             // -> Komplett voll: Ende, Unentschieden
             // -> Gewinner?: Ende, Gewonnen
-            // -> sonst gehts weiter mit dem nächstem Spiele
-
 
             //Testen, ob Spielfeld voll ist
+            boolean is_win= test_game_winner(playground);
+            if(is_win)
+            {
+                println("Spieler " + spieler + " hat gewonnen");
+                break;
+            }
+
             boolean is_draw = test_game_draw(playground);
             if (is_draw) {
                 println("Unentschieden");
                 break;  // Aus der while(true) raus
             }
+            if (spieler == 1)
+            {
+                spieler = 2;
+            }
+            else
+                {
+                spieler = 1;
+                }
         }
 
         println("Ende?");
@@ -197,29 +296,5 @@ public class Main {
                 }
             }
         }
-
-        printPlayGround(playground);  //Funktionsaufruf
-
-
-        println("   :" + playground[2][9]);  //Ausgeben des Wertes aus Zeile 3 Spalte 9
-
-        for (int y = 0; y < playground.length; y++) {  //jede Zeile wird durchgelaufen
-
-            char[] zeile = playground[y];  // Schrank Y wird "Zeile" zugewiessen (Wichtig, nicht die Schublade und keine Kopie!!!)
-
-            for (int x = 0; x < zeile.length; x++) { //Es wird jede Schublade x des Schrankes y durchlaufen
-                print("" + zeile[x] + "  ");  //Ausgabe Inhald der Schublade x
-            }
-            println("");
-        }
     }
 }
- /* while(true) {
-            println("Was ist dein Liebligsbuchstabe oder Ziffer?");
-            char liebling = scan_char();
-            println("Aso, also " + liebling);
-            if (liebling == ' ') {
-                println("Spinner :D");
-            }
-        }
-  */
