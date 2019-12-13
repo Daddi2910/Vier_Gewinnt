@@ -73,7 +73,8 @@ public class Main {
         int num;
         do {
             char input = scan_char();
-            println("Deine Eingabe ist " + input + ". Liegt die Zahl außerhalb des Geltungsbereich, erscheint erneut die Eingabeaufforderung");
+            println("Deine Eingabe ist " + input
+                    + ". Liegt die Zahl außerhalb des Geltungsbereich, erscheint erneut die Eingabeaufforderung");
             num = input - '0'; // oder -48 aus ascii ziffer ne echte machen ('0'==48)
         }
         while (num < 0 || num >= 10);
@@ -84,99 +85,84 @@ public class Main {
         return num;
     }
 
-    static boolean test_game_draw(char[][] playground)
-    {
-        for (int x = 0; x < COLS; x++)
-        {
+    static boolean test_game_draw(char[][] playground) {
+        for (int x = 0; x < COLS; x++) {
             if (playground[0][x] == ' ')
                 return false;
         }
         return true;
 
     }
-    static boolean test_game_winner(char[][] playground)
-    {
 
-        //Zeile konstant, gucken ob 4 aufeinanderfolgende Spalten mit gleichem Inhalt vorhanden sind
-        for (int y=0; y < ROWS; y++)
-        {
-            int zahl1 =0;
-            int zahl2 =1;
-            int zahl3 =2;
-            int zahl4 =3;
+    static boolean test_game_winner(char[][] playground) {
 
-            for (int a =0; a<= COLS-4; a++)
-            {
-                if (playground[y][zahl1] == 'Z' && playground[y][zahl2] == 'Z' && playground[y][zahl3] == 'Z' && playground[y][zahl4] == 'Z' || playground[y][zahl1] == 'E' && playground[y][zahl2] == 'E' && playground[y][zahl3] == 'E' && playground[y][zahl4] == 'E')
-                {
-                    return true;
+        // René´s Angeberlösung
+        for (int y = 0; y < ROWS; y++) {
+            for (int x = 0; x < COLS; x++) {
+                // Schleife die alle Felder durch geht (eigentlich müssen nicht alle, ist aber egal...)
+
+                // Ankerpunktspieler an y; x
+                char player = playground[y][x];
+                // Wenn am Ankerpunkt kein Spieler vorhanden ist, überspringen
+                if (player == ' ')
+                    continue;
+
+
+                // Fall 1: Horizontal nach rechts
+                if (x <= COLS - 4) {
+                    boolean won = true;
+                    for (int i = 1; i < 4; i++) {
+                        if (playground[y][x + i] != player) {
+                            won = false;
+                            break;
+                        }
+                    }
+                    if (won)
+                        return true;
                 }
-                zahl1++;
-                zahl2++;
-                zahl3++;
-                zahl4++;
+
+                // Fall 2: Vertikal nach unten
+                if (y <= ROWS - 4) {
+                    boolean won = true;
+                    for (int i = 1; i < 4; i++) {
+                        if (playground[y + i][x] != player) {
+                            won = false;
+                            break;
+                        }
+                    }
+                    if (won)
+                        return true;
+                }
+
+                // Fall 3: Diagonal nach unten rechts
+                if (x <= COLS - 4 && y <= ROWS - 4) {
+                    boolean won = true;
+                    for (int i = 1; i < 4; i++) {
+                        if (playground[y + i][x + i] != player) {
+                            won = false;
+                            break;
+                        }
+                    }
+                    if (won)
+                        return true;
+                }
+
+                // Fall 4: Diagonal nach unten links
+                if (x >= 3 && y <= ROWS - 4) {
+                    boolean won = true;
+                    for (int i = 1; i < 4; i++) {
+                        if (playground[y + i][x - i] != player) {
+                            won = false;
+                            break;
+                        }
+                    }
+                    if (won)
+                        return true;
+                }
             }
         }
-        //Spalte konstant, gucken ob 4 aufeinanderfolgende Zeilen mit gleichem Inhalt vorhanden sind
-        for (int x=0; x < COLS; x++)
-        {
-            int zahl1 =0;
-            int zahl2 =1;
-            int zahl3 =2;
-            int zahl4 =3;
 
-            for (int a =0; a<= ROWS-4; a++)
-            {
-                if (playground[zahl1][x] == 'Z' && playground[zahl2][x] == 'Z' && playground[zahl3][x] == 'Z' && playground[zahl4][x] == 'Z' || playground[zahl1][x] == 'E' && playground[zahl2][x] == 'E' && playground[zahl3][x] == 'E' && playground[zahl4][x] == 'E')
-                {
-                    return true;
-                }
-                zahl1++;
-                zahl2++;
-                zahl3++;
-                zahl4++;
-            }
-        }
-        //Die Diagonale nach rechts absteigend
-            for (int y=0; y < ROWS; y++) {
-                int zahl1 = 0;
-                int zahl2 = 1;
-                int zahl3 = 2;
-                int zahl4 = 3;
-
-                for (int a = 0; a <= COLS - 4; a++) {
-                    if (playground[y][zahl1] == 'Z' && playground[y + 1][zahl2] == 'Z' && playground[y + 2][zahl3] == 'Z' && playground[y + 3][zahl4] == 'Z' || playground[y][zahl1] == 'E' && playground[y + 1][zahl2] == 'E' && playground[y + 2][zahl3] == 'E' && playground[y + 3][zahl4] == 'E') {
-                        return true;
-                    }
-                    zahl1++;
-                    zahl2++;
-                    zahl3++;
-                    zahl4++;
-                }
-            }
-
-            //Diagonale nach links absteigend
-         for (int x=0; x < COLS; x++)
-            {
-                int zahl1 =0;
-                int zahl2 =1;
-                int zahl3 =2;
-                int zahl4 =3;
-
-                for (int a =0; a<= ROWS-4; a++)
-                {
-                    if (playground[zahl1][x] == 'Z' && playground[zahl2][x] == 'Z' && playground[zahl3][x] == 'Z' && playground[zahl4][x] == 'Z' || playground[zahl1][x] == 'E' && playground[zahl2][x] == 'E' && playground[zahl3][x] == 'E' && playground[zahl4][x] == 'E')
-                    {
-                        return true;
-                    }
-                    zahl1++;
-                    zahl2++;
-                    zahl3++;
-                    zahl4++;
-                }
-
-            }
-
+        // Kein Gewinner
         return false;
     }
 
@@ -207,10 +193,10 @@ public class Main {
         }
 
         /////////// Beispieldaten erzeugen:
-       // for (int y = 0; y < ROWS; y++) {
-         //   for (int x = 0; x < COLS - 1; x++)
+        // for (int y = 0; y < ROWS; y++) {
+        //   for (int x = 0; x < COLS - 1; x++)
 
-           //     playground[y][x] = 'O';
+        //     playground[y][x] = 'O';
 
         //    playground[ROWS - 1][5] = 'O';
         //  playground[ROWS - 1][6] = 'O';
@@ -247,30 +233,26 @@ public class Main {
 
             // neues Spielfeld testen:
 
-            // -> Komplett voll: Ende, Unentschieden
             // -> Gewinner?: Ende, Gewonnen
+            // -> Komplett voll: Ende, Unentschieden
 
-            //Testen, ob Spielfeld voll ist
-            boolean is_win= test_game_winner(playground);
-            if(is_win)
-            {
+            boolean is_win = test_game_winner(playground);
+            if (is_win) {
                 println("Spieler " + spieler + " hat gewonnen");
                 break;
             }
 
+            //Testen, ob Spielfeld voll ist
             boolean is_draw = test_game_draw(playground);
             if (is_draw) {
                 println("Unentschieden");
                 break;  // Aus der while(true) raus
             }
-            if (spieler == 1)
-            {
+            if (spieler == 1) {
                 spieler = 2;
-            }
-            else
-                {
+            } else {
                 spieler = 1;
-                }
+            }
         }
 
         println("Ende?");
@@ -278,23 +260,95 @@ public class Main {
     }
 
 
-    static void beispiele() {
 
-        // write your code here
 
-        //int[][] matrix = {{1, 2, 3}, {4, 5, 6}};
-        char[][] playground = new char[COLS][ROWS]; //Erstellung der Matrix -->Koordinatensystem ist obenlinks!!!
-        for (int y = 0; y < playground.length; y++) {  //Anzahl der "Schranksysteme"
-            for (int x = 0; x < playground[y].length; x++) { //Anzahl der Fächer des Schrankelements an der Stelle y
-                int tmp = x + y;             //Beispieldaten werdden erzeugt
-                if (tmp % 3 == 0) {
-                    playground[y][x] = '+';
-                } else if (tmp % 3 == 1) {
-                    playground[y][x] = 'X';
-                } else {
-                    playground[y][x] = 'O';
-                }
-            }
+//Zeile konstant, gucken ob 4 aufeinanderfolgende Spalten mit gleichem Inhalt vorhanden sind
+/*
+        for (int y = 0; y < ROWS; y++) {
+        int zahl1 = 0;
+        int zahl2 = 1;
+        int zahl3 = 2;
+        int zahl4 = 3;
+
+        for (int a = 0; a <= COLS - 4; a++) {
+        if (playground[y][zahl1] == 'Z' && playground[y][zahl2] == 'Z'
+        && playground[y][zahl3] == 'Z' && playground[y][zahl4] == 'Z'
+        || playground[y][zahl1] == 'E' && playground[y][zahl2] == 'E'
+        && playground[y][zahl3] == 'E' && playground[y][zahl4] == 'E') {
+        return true;
         }
-    }
+        zahl1++;
+        zahl2++;
+        zahl3++;
+        zahl4++;
+        }
+        }
+
+
+        //Spalte konstant, gucken ob 4 aufeinanderfolgende Zeilen mit gleichem Inhalt vorhanden sind
+        for (int x = 0; x < COLS; x++) {
+        int zahl1 = 0;
+        int zahl2 = 1;
+        int zahl3 = 2;
+        int zahl4 = 3;
+
+        for (int a = 0; a <= ROWS - 4; a++) {
+        if (playground[zahl1][x] == 'Z' && playground[zahl2][x] == 'Z'
+        && playground[zahl3][x] == 'Z' && playground[zahl4][x] == 'Z'
+        || playground[zahl1][x] == 'E' && playground[zahl2][x] == 'E'
+        && playground[zahl3][x] == 'E' && playground[zahl4][x] == 'E') {
+        return true;
+        }
+        zahl1++;
+        zahl2++;
+        zahl3++;
+        zahl4++;
+        }
+        }
+        //Die Diagonale nach rechts absteigend
+        for (int y = 0; y < ROWS; y++) {
+        int zahl1 = 0;
+        int zahl2 = 1;
+        int zahl3 = 2;
+        int zahl4 = 3;
+
+        for (int a = 0; a <= COLS - 4; a++) {
+        if (playground[y][zahl1] == 'Z' && playground[y + 1][zahl2] == 'Z'
+        && playground[y + 2][zahl3] == 'Z' && playground[y + 3][zahl4] == 'Z'
+        || playground[y][zahl1] == 'E' && playground[y + 1][zahl2] == 'E'
+        && playground[y + 2][zahl3] == 'E' && playground[y + 3][zahl4] == 'E') {
+        return true;
+        }
+        zahl1++;
+        zahl2++;
+        zahl3++;
+        zahl4++;
+        }
+        }
+
+        //Diagonale nach links absteigend
+        for (int x = 0; x < COLS; x++) {
+        int zahl1 = 0;
+        int zahl2 = 1;
+        int zahl3 = 2;
+        int zahl4 = 3;
+
+        for (int a = 0; a <= ROWS - 4; a++) {
+        if (playground[zahl1][x] == 'Z' && playground[zahl2][x] == 'Z'
+        && playground[zahl3][x] == 'Z' && playground[zahl4][x] == 'Z'
+        || playground[zahl1][x] == 'E' && playground[zahl2][x] == 'E'
+        && playground[zahl3][x] == 'E' && playground[zahl4][x] == 'E') {
+        return true;
+        }
+        zahl1++;
+        zahl2++;
+        zahl3++;
+        zahl4++;
+        }
+
+        }
+
+        return false;
+        }
+*/
 }
